@@ -64,10 +64,10 @@ def main():
 
     with st.container():
         st.markdown("<h2 style='color: #b78989; font-family: Permanent Marker;'>Parameters</h2>", unsafe_allow_html=True)
-        B = st.slider("Maximum width (B)", 1.0, 10.0, 5.0, 0.1)
-        L = st.slider("Maximum length (L)", 1.0, 15.0, 7.0, 0.1)
-        D_L4 = st.slider("Diameter at L/4 (D_L/4)", 0.1, B, B/2, 0.1)
-        n = st.slider("Shape parameter (n)", 0.1, 10.0, 2.0, 0.1)
+        B = st.slider("Maximum width", 1.0, 10.0, 5.0, 0.1)
+        L = st.slider("Maximum length", 1.0, 15.0, 7.0, 0.1)
+        D_L4 = st.slider("Diameter at L/4", 0.1, B, B/2, 0.1)
+        n = st.slider("Shape parameter", 0.1, 10.0, 2.0, 0.1)
 
         fig = generate_2d_preview(B, L, D_L4, n)
         st.pyplot(fig)
