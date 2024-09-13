@@ -2,3 +2,4 @@ matplotlib==3.9.2
 numpy==2.1.1
 numpy_stl==3.1.2
 streamlit==1.38.0
+scipy==1.14.1
