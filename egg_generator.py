@@ -126,6 +126,9 @@ def main():
                     st.session_state.D_L4 = bird_species[species]["D_L4"]
                     st.session_state.n = bird_species[species]["n"]
 
+        st.markdown("---")   
+        st.markdown("<p style='text-align: center;'>If you determine the parameters for a species of bird's egg, let me know and I'll add it to the program!</p>", unsafe_allow_html=True)
+
     with st.container():
         st.markdown("<h2>Parameters</h2>", unsafe_allow_html=True)
         col1, col2 = st.columns([7, 1])
@@ -175,6 +178,11 @@ def main():
         mime="application/octet-stream"
     ):
         pass
+
+# Add credits to the bottom of the app
+    st.markdown("---")
+    st.markdown("<p style='text-align: center;'>Created by Lincoln Savi of Savimade.ca | <a href='https://savimade.ca/contact'>Contact</a></p>", unsafe_allow_html=True)
+    
 
 if __name__ == "__main__":
     main()
