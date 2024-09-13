@@ -88,6 +88,7 @@ def main():
     # Define the bird species and their egg parameters
     bird_species = {
         "Coturnix Quail": {"B": 27.0, "L": 35.0, "D_L4": 15.0, "n": 1.6},
+        "Black-capped Chickadee": {"B": 12.0, "L": 15.0, "D_L4": 7.0, "n": 1.25},
         "Domestic Chicken": {"B": 50.0, "L": 70.0, "D_L4": 25.0, "n": 2.0},
         "Domestic Duck": {"B": 60.0, "L": 80.0, "D_L4": 30.0, "n": 2.5},
         "Domestic Goose": {"B": 70.0, "L": 90.0, "D_L4": 35.0, "n": 3.0},
