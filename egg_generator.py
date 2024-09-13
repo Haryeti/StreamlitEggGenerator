@@ -6,6 +6,7 @@ import io
 import stl
 import tempfile
 import os
+from scipy import integrate
 
 def egg_equation(x, B, L, D_L4, n):
     a = L / 2
@@ -15,7 +16,21 @@ def egg_equation(x, B, L, D_L4, n):
     y = b * np.sqrt(1 - (x / a)**2) * (1 + c * (x / a) + k * (x / a)**2)
     return y
 
-def generate_2d_preview(B, L, D_L4, n):
+def calculate_egg_volume(B, L, D_L4, n):
+    # Calculate volume using numerical integration
+    a = L / 2
+    b = B / 2
+    k = (D_L4 / L) - 0.5
+    c = n / 10
+
+    def integrand(x):
+        y = egg_equation(x, B, L, D_L4, n)
+        return np.pi * y**2
+
+    volume, _ = integrate.quad(integrand, -a, a)
+    return volume
+
+def generate_2d_preview(B, L, D_L4, n,auto_scale):
     x = np.linspace(-L/2, L/2, 1000)
     y = egg_equation(x, B, L, D_L4, n)
     
@@ -35,8 +50,21 @@ def generate_2d_preview(B, L, D_L4, n):
     ax.set_title("2D Egg Preview")
     ax.set_aspect('equal', 'box')
     ax.grid(True)
-    ax.set_xlim(-80, 80)
-    ax.set_ylim(-70, 70)
+
+    if auto_scale:
+        margin = 0.1  # 10% margin
+        x_margin = L * margin
+        y_margin = B * margin
+        ax.set_xlim(-L/2 - x_margin, L/2 + x_margin)
+        ax.set_ylim(-B/2 - y_margin, B/2 + y_margin)
+    else:
+        ax.set_xlim(-80, 80)
+        ax.set_ylim(-70, 70)
+
+    # Set the axis labels with units
+    ax.set_xlabel("mm")
+    ax.set_ylabel("mm")
+
     return fig
 
 def generate_3d_model(B, L, D_L4, n):
@@ -88,7 +116,8 @@ def main():
     # Define the bird species and their egg parameters
     bird_species = {
         "Coturnix Quail": {"B": 27.0, "L": 35.0, "D_L4": 15.0, "n": 1.6},
-        "Black-capped Chickadee": {"B": 12.0, "L": 15.0, "D_L4": 7.0, "n": 1.25},
+        "Black-capped Chickadee": {"B": 12.0, "L": 15.0, "D_L4": 7.0, "n": 1.65},
+        "Snow Bunting": {"B": 16.5, "L": 22.9, "D_L4": 12.0, "n": 1.25},
         "Domestic Chicken": {"B": 50.0, "L": 70.0, "D_L4": 25.0, "n": 2.0},
         "Domestic Duck": {"B": 60.0, "L": 80.0, "D_L4": 30.0, "n": 2.5},
         "Canada Goose": {"B": 56.0, "L": 83.0, "D_L4": 43.0, "n": 1.0},
@@ -97,11 +126,12 @@ def main():
     }
 
     if 'selected_species' not in st.session_state:
-        st.session_state.selected_species = "Chicken"
+        st.session_state.selected_species = "Domestic Chicken"
         st.session_state.B = 50.0
         st.session_state.L = 70.0
         st.session_state.D_L4 = 25.0
         st.session_state.n = 2.0
+        st.session_state.auto_scale = False
 
     # Add a sidebar with a list of bird species
     with st.sidebar:
@@ -130,7 +160,8 @@ def main():
         st.markdown("---")   
         st.markdown("<p style='text-align: center;'>If you determine the parameters for a species of bird's egg, let me know and I'll add it to the program!</p>", unsafe_allow_html=True)
 
-    with st.container():
+    with st.container(border=True):
+        
         st.markdown("<h2>Parameters</h2>", unsafe_allow_html=True)
         col1, col2 = st.columns([7, 1])
         L = col1.slider("Length (mm)", 10.0, 160.0, st.session_state.L, 0.1)
@@ -152,8 +183,23 @@ def main():
         if n_text:
             n = float(n_text)
 
-        fig = generate_2d_preview(B, L, D_L4, n)
-        st.pyplot(fig)
+    # Calculate egg volume
+    volume = calculate_egg_volume(B, L, D_L4, n)/1000
+
+
+
+    with st.container(border=True):
+        # Display egg volume
+        col3, col4 = st.columns([1,3])
+        density = col3.number_input("Density(g/cm³)", value=1.031, key="density",step=0.001,format="%.3f")
+        col4.markdown(f"<h3>Calculated Egg Volume: {volume:.2f} cm³</h3>", unsafe_allow_html=True)
+        col4.markdown(f"<h3>Theoretical Egg Mass: {(float(volume)*float(density)):.2f} g</h3>", unsafe_allow_html=True)
+
+
+    auto_scale = st.checkbox("Auto-scale 2D preview", value=st.session_state.auto_scale, key="auto_scale_checkbox")
+
+    fig = generate_2d_preview(B, L, D_L4, n, auto_scale)
+    st.pyplot(fig)
     
     col1, col2 = st.columns(2)  # Create two columns with equal width
     
