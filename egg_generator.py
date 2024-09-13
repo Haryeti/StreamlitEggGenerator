@@ -91,7 +91,7 @@ def main():
         "Black-capped Chickadee": {"B": 12.0, "L": 15.0, "D_L4": 7.0, "n": 1.25},
         "Domestic Chicken": {"B": 50.0, "L": 70.0, "D_L4": 25.0, "n": 2.0},
         "Domestic Duck": {"B": 60.0, "L": 80.0, "D_L4": 30.0, "n": 2.5},
-        "Domestic Goose": {"B": 70.0, "L": 90.0, "D_L4": 35.0, "n": 3.0},
+        "Canada Goose": {"B": 56.0, "L": 83.0, "D_L4": 43.0, "n": 1.0},
         "Ostrich": {"B": 130.0, "L": 150.0, "D_L4": 75.0, "n": 0.5},
         "Elephant Bird": {"B": 245.0, "L": 340.0, "D_L4": 140.0, "n": 1.25}
     }
