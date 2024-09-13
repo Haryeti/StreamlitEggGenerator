@@ -133,10 +133,10 @@ def main():
     with st.container():
         st.markdown("<h2>Parameters</h2>", unsafe_allow_html=True)
         col1, col2 = st.columns([7, 1])
-        B = col1.slider("Width (mm)", 5.0, 150.0, st.session_state.B, 0.1)
-        B_text = col2.text_input("Width", value=str(B), key="B_text", label_visibility="hidden")
         L = col1.slider("Length (mm)", 10.0, 160.0, st.session_state.L, 0.1)
         L_text = col2.text_input("Length", value=str(L), key="L_text", label_visibility="hidden")
+        B = col1.slider("Width (mm)", 5.0, 150.0, st.session_state.B, 0.1)
+        B_text = col2.text_input("Width", value=str(B), key="B_text", label_visibility="hidden")
         D_L4 = col1.slider("End roundness", 0.1, B, st.session_state.D_L4, 0.1)
         D_L4_text = col2.text_input("Roundness", value=str(D_L4), key="D_L4_text", label_visibility="hidden")
         n = col1.slider("Diameter location", 0.01, 7.0, st.session_state.n, 0.01)
@@ -158,6 +158,7 @@ def main():
     col1, col2 = st.columns(2)  # Create two columns with equal width
     
     stl_data = None  # Define stl_data variable outside of the if block
+    file_name = "SaviMadeEgg.stl"  # Define default file name
     
     if col1.button("Generate 3D Model"):
         with st.spinner("Generating 3D model..."):
@@ -172,12 +173,17 @@ def main():
             
             st.success("3D model generated successfully!")
     
-    if stl_data is not None and col2.download_button(
-        label="Download STL",
-        data=stl_data,
-        file_name="egg_model.stl",
-        mime="application/octet-stream"
-    ):
+    if stl_data is not None:
+        # Prompt the user for a file name
+        file_name = st.text_input("Enter a file name", value="SaviMadeEgg(Parameters-_" + str(L_text) + "_" + str(B_text) + "_" + str(D_L4_text) + "_" + str(n_text) +")") + ".stl"
+
+        # Save the STL file with the user-specified file name
+        col2.download_button(
+            label="Download STL",
+            data=stl_data,
+            file_name=file_name,
+            mime="application/octet-stream"
+        )
         pass
 
 # Add credits to the bottom of the app
