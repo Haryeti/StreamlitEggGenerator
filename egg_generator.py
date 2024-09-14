@@ -115,13 +115,15 @@ def main():
 
     # Define the bird species and their egg parameters
     bird_species = {
+        "Common Loon": {"B": 56.0, "L": 89.0, "D_L4": 33.9, "n": 1.37},
         "Coturnix Quail": {"B": 27.0, "L": 35.0, "D_L4": 15.0, "n": 1.6},
-        "Black-capped Chickadee": {"B": 12.0, "L": 15.0, "D_L4": 7.0, "n": 1.65},
+        "Black-capped Chickadee": {"B": 12.0, "L": 15.0, "D_L4": 7.0, "n": 1.11},
         "Snow Bunting": {"B": 16.5, "L": 22.9, "D_L4": 12.0, "n": 1.25},
-        "Domestic Chicken": {"B": 50.0, "L": 70.0, "D_L4": 25.0, "n": 2.0},
-        "Domestic Duck": {"B": 60.0, "L": 80.0, "D_L4": 30.0, "n": 2.5},
-        "Canada Goose": {"B": 56.0, "L": 83.0, "D_L4": 43.0, "n": 1.0},
+        "Domestic Chicken": {"B": 40.0, "L": 58.0, "D_L4": 25.0, "n": 2.0},
+        "Domestic Duck": {"B": 44.0, "L": 65.0, "D_L4": 35.6, "n": 1.4},
+        "Canada Goose": {"B": 56.6, "L": 83.87, "D_L4": 48.6, "n": 1.0},
         "Ostrich": {"B": 130.0, "L": 150.0, "D_L4": 75.0, "n": 0.5},
+        "Rhea": {"B": 90.0, "L": 130.0, "D_L4": 51.0, "n": 0.87},
         "Elephant Bird": {"B": 245.0, "L": 340.0, "D_L4": 140.0, "n": 1.25}
     }
 
