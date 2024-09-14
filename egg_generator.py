@@ -8,6 +8,8 @@ import tempfile
 import os
 from scipy import integrate
 
+st.set_page_config(layout="wide")
+
 def egg_equation(x, B, L, D_L4, n):
     a = L / 2
     b = B / 2
@@ -19,9 +21,6 @@ def egg_equation(x, B, L, D_L4, n):
 def calculate_egg_volume(B, L, D_L4, n):
     # Calculate volume using numerical integration
     a = L / 2
-    b = B / 2
-    k = (D_L4 / L) - 0.5
-    c = n / 10
 
     def integrand(x):
         y = egg_equation(x, B, L, D_L4, n)
@@ -122,7 +121,7 @@ def main():
         "Domestic Chicken": {"B": 40.0, "L": 58.0, "D_L4": 25.0, "n": 2.0},
         "Domestic Duck": {"B": 44.0, "L": 65.0, "D_L4": 35.6, "n": 1.4},
         "Canada Goose": {"B": 56.6, "L": 83.87, "D_L4": 48.6, "n": 1.0},
-        "Ostrich": {"B": 130.0, "L": 150.0, "D_L4": 75.0, "n": 0.5},
+        "Ostrich": {"B": 130.0, "L": 150.0, "D_L4": 75.0, "n": 0.6},
         "Rhea": {"B": 90.0, "L": 130.0, "D_L4": 51.0, "n": 0.87},
         "Ruby-throated Hummingbird": {"B": 8.5, "L": 13.0, "D_L4": 9.0, "n": 1.0},
         "Elephant Bird": {"B": 245.0, "L": 340.0, "D_L4": 177.9, "n": 1.25}
@@ -137,9 +136,13 @@ def main():
         st.session_state.auto_scale = False
 
     # Add a sidebar with a list of bird species
+    cola, colb = st.columns(2)
     with st.sidebar:
+
+        col5, col6 = st.columns([2,3],vertical_alignment="center")
+        col5.write("Sort by Name")
         # Add a toggleable button that sorts by length or by name
-        sort_by_length = st.checkbox("Sort by length")
+        sort_by_length = col6.toggle("Sort by length")
 
         # Sort the list of bird species by egg length or by name
         if sort_by_length:
@@ -152,6 +155,8 @@ def main():
             if st.button(
                 species,
                 key=f"button_{species}",
+                type="secondary"
+                
             ):
                 st.session_state.selected_species = species
                 if species != "Custom":
@@ -163,10 +168,16 @@ def main():
         st.markdown("---")   
         st.markdown("<p style='text-align: center;'>If you determine the parameters for a species of bird's egg, let me know and I'll add it to the program!</p>", unsafe_allow_html=True)
 
-    with st.container(border=True):
+    with cola.container(border=True):
         
-        st.markdown("<h2>Parameters</h2>", unsafe_allow_html=True)
-        col1, col2 = st.columns([7, 1])
+        col1, col2 = st.columns([7, 1],vertical_alignment="center")
+        col1.markdown("<h2>Parameters</h2>", unsafe_allow_html=True)
+        with col2.popover("about app"):
+            st.write("This purpose of this app is to generate 3D egg models for the purpose of 3D printing them. It should be capable of replicating the geometry of any bird species, but only a few are pre-programmed and selectable in the side bar. To make any other egg, you must adjust the parameters to match the geometry of the species you desire.")
+            st.write("It is possible to set parameter values outside the bounds of the sliders if you type them in the corresponding text input boxes.")
+            st.write("You can do whatever you want with the files you download from this app. I just ask that you credit me, Lincoln Savi, or Savimade.ca or both as the creator of the tool so that others can find it.")
+            st.write("Feel free to buy some stl files from my website as a thank you!")
+            st.link_button("Savimade.ca","https://savimade.ca/shop",type="primary")
         L = col1.slider("Length (mm)", 10.0, 160.0, st.session_state.L, 0.1)
         L_text = col2.text_input("Length", value=str(L), key="L_text", label_visibility="hidden")
         B = col1.slider("Width (mm)", 5.0, 150.0, st.session_state.B, 0.1)
@@ -191,25 +202,25 @@ def main():
 
 
 
-    with st.container(border=True):
+    with cola.container(border=True):
         # Display egg volume
-        col3, col4 = st.columns([1,3])
+        col3, col4 = st.columns([1,3],vertical_alignment="bottom")
         density = col3.number_input("Density(g/cm³)", value=1.031, key="density",step=0.001,format="%.3f")
         col4.markdown(f"<h3>Calculated Egg Volume: {volume:.2f} cm³</h3>", unsafe_allow_html=True)
         col4.markdown(f"<h3>Theoretical Egg Mass: {(float(volume)*float(density)):.2f} g</h3>", unsafe_allow_html=True)
 
 
-    auto_scale = st.checkbox("Auto-scale 2D preview", value=st.session_state.auto_scale, key="auto_scale_checkbox")
-
+    col7, col8 = colb.columns([5,1])
+    auto_scale = col8.checkbox("Auto-scale 2D preview", value=st.session_state.auto_scale, key="auto_scale_checkbox")
     fig = generate_2d_preview(B, L, D_L4, n, auto_scale)
-    st.pyplot(fig)
-    
-    col1, col2 = st.columns(2)  # Create two columns with equal width
+    colb.pyplot(fig)
+
+    col1, col2 = colb.columns(2)  # Create two columns with equal width
     
     stl_data = None  # Define stl_data variable outside of the if block
     file_name = "SaviMadeEgg.stl"  # Define default file name
     
-    if col1.button("Generate 3D Model"):
+    if cola.button("Generate 3D Model"):
         with st.spinner("Generating 3D model..."):
             stl_file = generate_3d_model(B, L, D_L4, n)
             
@@ -220,14 +231,14 @@ def main():
             # Delete the temporary file
             os.remove(stl_file)
             
-            st.success("3D model generated successfully!")
+            cola.success("3D model generated successfully!")
     
     if stl_data is not None:
         # Prompt the user for a file name
-        file_name = st.text_input("Enter a file name", value="SaviMadeEgg(Parameters-_" + str(L_text) + "_" + str(B_text) + "_" + str(D_L4_text) + "_" + str(n_text) +")") + ".stl"
+        file_name = cola.text_input("Enter a file name", value="SaviMadeEgg(Parameters-_" + str(L_text) + "_" + str(B_text) + "_" + str(D_L4_text) + "_" + str(n_text) +")") + ".stl"
 
         # Save the STL file with the user-specified file name
-        col2.download_button(
+        cola.download_button(
             label="Download STL",
             data=stl_data,
             file_name=file_name,
