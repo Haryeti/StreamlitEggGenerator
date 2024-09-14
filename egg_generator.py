@@ -7,12 +7,18 @@ import stl
 import tempfile
 import os
 from scipy import integrate
+import json
 
 st.set_page_config(
         layout="wide",
         page_title='Egg Generator - SaviMade',
         page_icon="🥚"                  
         )
+
+def load_bird_species():
+    with open("bird_species.json") as f:
+        bird_species = json.load(f)
+    return bird_species
 
 def egg_equation(x, B, L, D_L4, n):
     a = L / 2
@@ -114,22 +120,10 @@ def generate_3d_model(B, L, D_L4, n):
         return temp.name
 
 def main():
+    # Load the bird egg data from the JSON file
+    bird_species = load_bird_species()
+    
     st.markdown("<h1 style='text-align: center;'>3D Egg Generator</h1>", unsafe_allow_html=True)
-
-    # Define the bird species and their egg parameters
-    bird_species = {
-        "Common Loon": {"B": 56.0, "L": 89.0, "D_L4": 33.9, "n": 1.37},
-        "Coturnix Quail": {"B": 27.0, "L": 35.0, "D_L4": 15.0, "n": 1.6},
-        "Black-capped Chickadee": {"B": 12.0, "L": 15.0, "D_L4": 7.0, "n": 1.11},
-        "Snow Bunting": {"B": 16.5, "L": 22.9, "D_L4": 12.0, "n": 1.25},
-        "Domestic Chicken": {"B": 40.0, "L": 58.0, "D_L4": 25.0, "n": 2.0},
-        "Domestic Duck": {"B": 44.0, "L": 65.0, "D_L4": 35.6, "n": 1.4},
-        "Canada Goose": {"B": 56.6, "L": 83.87, "D_L4": 48.6, "n": 1.0},
-        "Ostrich": {"B": 130.0, "L": 150.0, "D_L4": 75.0, "n": 0.6},
-        "Rhea": {"B": 90.0, "L": 130.0, "D_L4": 51.0, "n": 0.87},
-        "Ruby-throated Hummingbird": {"B": 8.5, "L": 13.0, "D_L4": 9.0, "n": 1.0},
-        "Elephant Bird": {"B": 245.0, "L": 340.0, "D_L4": 177.9, "n": 1.25}
-    }
 
     if 'selected_species' not in st.session_state:
         st.session_state.selected_species = "Domestic Chicken"
