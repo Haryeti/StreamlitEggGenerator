@@ -8,7 +8,11 @@ import tempfile
 import os
 from scipy import integrate
 
-st.set_page_config(layout="wide")
+st.set_page_config(
+        layout="wide",
+        page_title='Egg Generator - SaviMade',
+        page_icon="🥚"                  
+        )
 
 def egg_equation(x, B, L, D_L4, n):
     a = L / 2
