@@ -124,7 +124,8 @@ def main():
         "Canada Goose": {"B": 56.6, "L": 83.87, "D_L4": 48.6, "n": 1.0},
         "Ostrich": {"B": 130.0, "L": 150.0, "D_L4": 75.0, "n": 0.5},
         "Rhea": {"B": 90.0, "L": 130.0, "D_L4": 51.0, "n": 0.87},
-        "Elephant Bird": {"B": 245.0, "L": 340.0, "D_L4": 140.0, "n": 1.25}
+        "Ruby-throated Hummingbird": {"B": 8.5, "L": 13.0, "D_L4": 9.0, "n": 1.0},
+        "Elephant Bird": {"B": 245.0, "L": 340.0, "D_L4": 177.9, "n": 1.25}
     }
 
     if 'selected_species' not in st.session_state:
