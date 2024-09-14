@@ -7,7 +7,7 @@ import stl
 import tempfile
 import os
 from scipy import integrate
-import json
+import pandas as pd
 
 st.set_page_config(
         layout="wide",
@@ -16,8 +16,8 @@ st.set_page_config(
         )
 
 def load_bird_species():
-    with open("bird_species.json") as f:
-        bird_species = json.load(f)
+    df = pd.read_csv("bird_species.csv")
+    bird_species = df.set_index("species").T.to_dict()
     return bird_species
 
 def egg_equation(x, B, L, D_L4, n):
