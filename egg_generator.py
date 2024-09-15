@@ -17,6 +17,16 @@ st.set_page_config(
 
 st.html("<style>[data-testid='stHeaderActionElements'] {display: none;}</style>")
 
+#hide image fullscreen button#########################
+hide_img_fs = '''
+<style>
+button[title="View fullscreen"]{
+    visibility: hidden;}
+</style>
+'''
+st.markdown(hide_img_fs, unsafe_allow_html=True)
+######################################################
+
 def load_bird_species():
     df = pd.read_csv("bird_species.csv")
     bird_species = df.set_index("species").T.to_dict()
