@@ -15,6 +15,8 @@ st.set_page_config(
         page_icon="🥚"                  
         )
 
+st.html("<style>[data-testid='stHeaderActionElements'] {display: none;}</style>")
+
 def load_bird_species():
     df = pd.read_csv("bird_species.csv")
     bird_species = df.set_index("species").T.to_dict()
@@ -124,7 +126,12 @@ def main():
     bird_species = load_bird_species()
     
     st.markdown("<h1 style='text-align: center;'>3D Egg Generator</h1>", unsafe_allow_html=True)
-
+    with st.popover("about app"):
+        st.write("This purpose of this app is to generate 3D egg models for the purpose of 3D printing them. It should be capable of replicating the geometry of any bird species, but only a few are pre-programmed and selectable in the side bar. To make any other egg, you must adjust the parameters to match the geometry of the species you desire.")
+        st.write("It is possible to set parameter values outside the bounds of the sliders if you type them in the corresponding text input boxes.")
+        st.write("You can do whatever you want with the files you download from this app. I just ask that you credit me, Lincoln Savi, or Savimade.ca or both as the creator of the tool so that others can find it.")
+        st.write("Feel free to buy some stl files from my website as a thank you!")
+        st.link_button("Savimade.ca","https://savimade.ca/shop",type="primary")
     if 'selected_species' not in st.session_state:
         st.session_state.selected_species = "Domestic Chicken"
         st.session_state.B = 50.0
@@ -170,12 +177,6 @@ def main():
         
         col1, col2 = st.columns([7, 1],vertical_alignment="center")
         col1.markdown("<h2>Parameters</h2>", unsafe_allow_html=True)
-        with col2.popover("about app"):
-            st.write("This purpose of this app is to generate 3D egg models for the purpose of 3D printing them. It should be capable of replicating the geometry of any bird species, but only a few are pre-programmed and selectable in the side bar. To make any other egg, you must adjust the parameters to match the geometry of the species you desire.")
-            st.write("It is possible to set parameter values outside the bounds of the sliders if you type them in the corresponding text input boxes.")
-            st.write("You can do whatever you want with the files you download from this app. I just ask that you credit me, Lincoln Savi, or Savimade.ca or both as the creator of the tool so that others can find it.")
-            st.write("Feel free to buy some stl files from my website as a thank you!")
-            st.link_button("Savimade.ca","https://savimade.ca/shop",type="primary")
         L = col1.slider("Length (mm)", 10.0, 160.0, st.session_state.L, 0.1)
         L_text = col2.text_input("Length", value=str(L), key="L_text", label_visibility="hidden")
         B = col1.slider("Width (mm)", 5.0, 150.0, st.session_state.B, 0.1)
@@ -208,7 +209,7 @@ def main():
         col4.markdown(f"<h3>Theoretical Egg Mass: {(float(volume)*float(density)):.2f} g</h3>", unsafe_allow_html=True)
 
 
-    col7, col8 = colb.columns([5,1])
+    col7, col8 = colb.columns([3,1])
     auto_scale = col8.checkbox("Auto-scale 2D preview", value=st.session_state.auto_scale, key="auto_scale_checkbox")
     fig = generate_2d_preview(B, L, D_L4, n, auto_scale)
     colb.pyplot(fig)
