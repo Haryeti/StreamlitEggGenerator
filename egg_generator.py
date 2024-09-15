@@ -208,11 +208,11 @@ def main():
         col4.markdown(f"<h3>Calculated Egg Volume: {volume:.2f} cm³</h3>", unsafe_allow_html=True)
         col4.markdown(f"<h3>Theoretical Egg Mass: {(float(volume)*float(density)):.2f} g</h3>", unsafe_allow_html=True)
 
-
-    col7, col8 = colb.columns([3,1])
-    auto_scale = col8.checkbox("Auto-scale 2D preview", value=st.session_state.auto_scale, key="auto_scale_checkbox")
-    fig = generate_2d_preview(B, L, D_L4, n, auto_scale)
-    colb.pyplot(fig)
+    with colb.container(border=True):
+        col7, col8 = st.columns([3,1])
+        auto_scale = col8.checkbox("Auto-scale 2D preview", value=st.session_state.auto_scale, key="auto_scale_checkbox")
+        fig = generate_2d_preview(B, L, D_L4, n, auto_scale)
+        st.pyplot(fig)
 
     col1, col2 = colb.columns(2)  # Create two columns with equal width
     
