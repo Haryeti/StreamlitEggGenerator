@@ -229,7 +229,7 @@ def main():
     stl_data = None  # Define stl_data variable outside of the if block
     file_name = "SaviMadeEgg.stl"  # Define default file name
     
-    if cola.button("Generate 3D Model"):
+    if cola.button("Generate 3D Model",type="primary"):
         with st.spinner("Generating 3D model..."):
             stl_file = generate_3d_model(B, L, D_L4, n)
             
@@ -251,7 +251,8 @@ def main():
             label="Download STL",
             data=stl_data,
             file_name=file_name,
-            mime="application/octet-stream"
+            mime="application/octet-stream",
+            type="primary"
         )
         pass
 
