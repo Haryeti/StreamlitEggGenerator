@@ -81,11 +81,11 @@ def generate_2d_preview(B, L, D_L4, n, auto_scale):
         y_margin = L * margin
         # Swap and flip limits for proper rotation
         ax.set_xlim(-B/2 - x_margin, B/2 + x_margin)
-        ax.set_ylim(L/2 + y_margin, -L/2 - y_margin)
+        ax.set_ylim(-L/2 - y_margin, L/2 + y_margin)
     else:
         # Swap and flip limits
         ax.set_xlim(-70, 70)
-        ax.set_ylim(80, -80)
+        ax.set_ylim(-80, 80)
 
     # Set the axis labels with units
     ax.set_xlabel("mm")
