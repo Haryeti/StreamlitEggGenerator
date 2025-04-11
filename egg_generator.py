@@ -140,10 +140,14 @@ def main():
     # Load the bird egg data from the JSON file
     bird_species = load_bird_species()
     
-    # Add the logo above the title
-    col_logo1, col_logo2, col_logo3 = st.columns([1, 2, 1])
-    with col_logo2:
-        st.image("https://savimade.ca/wp-content/uploads/2019/01/Untitled-4-01.png", width=200)
+    # Add the centered, clickable logo using HTML
+    st.markdown("""
+        <div style="display: flex; justify-content: center;">
+            <a href="https://savimade.ca" target="_blank">
+                <img src="https://savimade.ca/wp-content/uploads/2019/01/Untitled-4-01.png" width="200">
+            </a>
+        </div>
+    """, unsafe_allow_html=True)
     
     st.markdown("<h1 style='text-align: center;'>3D Egg Generator</h1>", unsafe_allow_html=True)
     with st.popover("about app"):
