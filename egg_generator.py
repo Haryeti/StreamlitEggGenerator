@@ -51,7 +51,7 @@ def calculate_egg_volume(B, L, D_L4, n):
     volume, _ = integrate.quad(integrand, -a, a)
     return volume
 
-def generate_2d_preview(B, L, D_L4, n,auto_scale):
+def generate_2d_preview(B, L, D_L4, n, auto_scale):
     x = np.linspace(-L/2, L/2, 1000)
     y = egg_equation(x, B, L, D_L4, n)
     
@@ -62,11 +62,12 @@ def generate_2d_preview(B, L, D_L4, n,auto_scale):
     y_scaled = y * scale_factor
     
     fig, ax = plt.subplots(figsize=(10, 5))
-    ax.plot(x, y_scaled, '#BE1E2D')
-    ax.plot(x, -y_scaled, '#BE1E2D')
+    # Swap x and y to rotate 90 degrees clockwise
+    ax.plot(y_scaled, x, '#BE1E2D')
+    ax.plot(-y_scaled, x, '#BE1E2D')
     
     # Fill the egg shape with a lighter shade
-    ax.fill_between(x, y_scaled, -y_scaled, color='#FFA07A', alpha=0.5)
+    ax.fill_betweenx(x, y_scaled, -y_scaled, color='#FFA07A', alpha=0.5)
     
     ax.set_title("2D Egg Preview")
     ax.set_aspect('equal', 'box')
@@ -74,13 +75,15 @@ def generate_2d_preview(B, L, D_L4, n,auto_scale):
 
     if auto_scale:
         margin = 0.1  # 10% margin
-        x_margin = L * margin
-        y_margin = B * margin
-        ax.set_xlim(-L/2 - x_margin, L/2 + x_margin)
-        ax.set_ylim(-B/2 - y_margin, B/2 + y_margin)
+        x_margin = B * margin
+        y_margin = L * margin
+        # Swap limits for rotation
+        ax.set_xlim(-B/2 - x_margin, B/2 + x_margin)
+        ax.set_ylim(-L/2 - y_margin, L/2 + y_margin)
     else:
-        ax.set_xlim(-80, 80)
-        ax.set_ylim(-70, 70)
+        # Swap limits for rotation
+        ax.set_xlim(-70, 70)
+        ax.set_ylim(-80, 80)
 
     # Set the axis labels with units
     ax.set_xlabel("mm")
@@ -134,6 +137,9 @@ def generate_3d_model(B, L, D_L4, n):
 def main():
     # Load the bird egg data from the JSON file
     bird_species = load_bird_species()
+    
+    # Add the logo above the title
+    st.image("https://savimade.ca/wp-content/uploads/2019/01/Untitled-4-01.png", width=200)
     
     st.markdown("<h1 style='text-align: center;'>3D Egg Generator</h1>", unsafe_allow_html=True)
     with st.popover("about app"):
@@ -208,8 +214,6 @@ def main():
 
     # Calculate egg volume
     volume = calculate_egg_volume(B, L, D_L4, n)/1000
-
-
 
     with cola.container(border=True):
         # Display egg volume
