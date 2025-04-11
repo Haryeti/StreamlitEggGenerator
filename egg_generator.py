@@ -63,11 +63,12 @@ def generate_2d_preview(B, L, D_L4, n, auto_scale):
     
     fig, ax = plt.subplots(figsize=(10, 5))
     
-    # Swap x and y to rotate 90 degrees clockwise and flip the y values to correct orientation
+    # Changed approach: for 90° clockwise rotation, we need to swap x,y and invert x
+    # This will put the pointy end to the right
     ax.plot(y_scaled, -x, '#BE1E2D')
     ax.plot(-y_scaled, -x, '#BE1E2D')
     
-    # Fill the egg shape with a lighter shade - also flipped
+    # Fill the egg shape with a lighter shade
     ax.fill_betweenx(-x, y_scaled, -y_scaled, color='#FFA07A', alpha=0.5)
     
     ax.set_title("2D Egg Preview")
@@ -78,13 +79,13 @@ def generate_2d_preview(B, L, D_L4, n, auto_scale):
         margin = 0.1  # 10% margin
         x_margin = B * margin
         y_margin = L * margin
-        # Swap limits for rotation
+        # Swap and flip limits for proper rotation
         ax.set_xlim(-B/2 - x_margin, B/2 + x_margin)
-        ax.set_ylim(L/2 + y_margin, -L/2 - y_margin)  # Flipped y-axis limits
+        ax.set_ylim(L/2 + y_margin, -L/2 - y_margin)
     else:
-        # Swap limits for rotation
+        # Swap and flip limits
         ax.set_xlim(-70, 70)
-        ax.set_ylim(80, -80)  # Flipped y-axis limits
+        ax.set_ylim(80, -80)
 
     # Set the axis labels with units
     ax.set_xlabel("mm")
@@ -140,7 +141,9 @@ def main():
     bird_species = load_bird_species()
     
     # Add the logo above the title
-    st.image("https://savimade.ca/wp-content/uploads/2019/01/Untitled-4-01.png", width=200)
+    col_logo1, col_logo2, col_logo3 = st.columns([1, 2, 1])
+    with col_logo2:
+        st.image("https://savimade.ca/wp-content/uploads/2019/01/Untitled-4-01.png", width=200)
     
     st.markdown("<h1 style='text-align: center;'>3D Egg Generator</h1>", unsafe_allow_html=True)
     with st.popover("about app"):
