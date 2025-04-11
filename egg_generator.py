@@ -62,12 +62,13 @@ def generate_2d_preview(B, L, D_L4, n, auto_scale):
     y_scaled = y * scale_factor
     
     fig, ax = plt.subplots(figsize=(10, 5))
-    # Swap x and y to rotate 90 degrees clockwise
-    ax.plot(y_scaled, x, '#BE1E2D')
-    ax.plot(-y_scaled, x, '#BE1E2D')
     
-    # Fill the egg shape with a lighter shade
-    ax.fill_betweenx(x, y_scaled, -y_scaled, color='#FFA07A', alpha=0.5)
+    # Swap x and y to rotate 90 degrees clockwise and flip the y values to correct orientation
+    ax.plot(y_scaled, -x, '#BE1E2D')
+    ax.plot(-y_scaled, -x, '#BE1E2D')
+    
+    # Fill the egg shape with a lighter shade - also flipped
+    ax.fill_betweenx(-x, y_scaled, -y_scaled, color='#FFA07A', alpha=0.5)
     
     ax.set_title("2D Egg Preview")
     ax.set_aspect('equal', 'box')
@@ -79,11 +80,11 @@ def generate_2d_preview(B, L, D_L4, n, auto_scale):
         y_margin = L * margin
         # Swap limits for rotation
         ax.set_xlim(-B/2 - x_margin, B/2 + x_margin)
-        ax.set_ylim(-L/2 - y_margin, L/2 + y_margin)
+        ax.set_ylim(L/2 + y_margin, -L/2 - y_margin)  # Flipped y-axis limits
     else:
         # Swap limits for rotation
         ax.set_xlim(-70, 70)
-        ax.set_ylim(-80, 80)
+        ax.set_ylim(80, -80)  # Flipped y-axis limits
 
     # Set the axis labels with units
     ax.set_xlabel("mm")
