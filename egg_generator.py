@@ -1,3 +1,4 @@
+
 import numpy as np
 import matplotlib.pyplot as plt
 import streamlit as st
@@ -61,10 +62,8 @@ def generate_2d_preview(B, L, D_L4, n, auto_scale):
     
     y_scaled = y * scale_factor
     
-    fig, ax = plt.subplots(figsize=(10, 5))
+    fig, ax = plt.subplots(figsize=(12, 6))
     
-    # Changed approach: for 90° clockwise rotation, we need to swap x,y and invert x
-    # This will put the pointy end to the right
     ax.plot(y_scaled, -x, '#BE1E2D')
     ax.plot(-y_scaled, -x, '#BE1E2D')
     
@@ -90,7 +89,8 @@ def generate_2d_preview(B, L, D_L4, n, auto_scale):
     # Set the axis labels with units
     ax.set_xlabel("mm")
     ax.set_ylabel("mm")
-
+    
+    plt.tight_layout()
     return fig
 
 def generate_3d_model(B, L, D_L4, n):
@@ -139,23 +139,6 @@ def generate_3d_model(B, L, D_L4, n):
 def main():
     # Load the bird egg data from the JSON file
     bird_species = load_bird_species()
-    
-    # Add the centered, clickable logo using HTML
-    st.markdown("""
-        <div style="display: flex; justify-content: center;">
-            <a href="https://savimade.ca" target="_blank">
-                <img src="https://savimade.ca/wp-content/uploads/2019/01/Untitled-4-01.png" width="200">
-            </a>
-        </div>
-    """, unsafe_allow_html=True)
-    
-    st.markdown("<h1 style='text-align: center;'>3D Egg Generator</h1>", unsafe_allow_html=True)
-    with st.popover("about app"):
-        st.write("This purpose of this app is to generate 3D egg models for the purpose of 3D printing them. It should be capable of replicating the geometry of any bird species, but only a few are pre-programmed and selectable in the side bar. To make any other egg, you must adjust the parameters to match the geometry of the species you desire.")
-        st.write("It is possible to set parameter values outside the bounds of the sliders if you type them in the corresponding text input boxes.")
-        st.write("You can do whatever you want with the files you download from this app. I just ask that you credit me, Lincoln Savi, or Savimade.ca or both as the creator of the tool so that others can find it.")
-        st.write("Feel free to buy some stl files from my website as a thank you!")
-        st.link_button("Savimade.ca","https://savimade.ca/shop",type="primary")
     if 'selected_species' not in st.session_state:
         st.session_state.selected_species = "Domestic Chicken"
         st.session_state.B = 50.0
@@ -198,7 +181,13 @@ def main():
         st.markdown("<p style='text-align: center;'>If you determine the parameters for a species of bird's egg, let me know and I'll add it to the program!</p>", unsafe_allow_html=True)
 
     with cola.container(border=True):
-        
+        st.markdown("<h1 style='text-align: center;'>3D Egg Generator</h1>", unsafe_allow_html=True)
+        with st.popover("about app"):
+            st.write("This purpose of this app is to generate 3D egg models for the purpose of 3D printing them. It should be capable of replicating the geometry of any bird species, but only a few are pre-programmed and selectable in the side bar. To make any other egg, you must adjust the parameters to match the geometry of the species you desire.")
+            st.write("It is possible to set parameter values outside the bounds of the sliders if you type them in the corresponding text input boxes.")
+            st.write("You can do whatever you want with the files you download from this app. I just ask that you credit me, Lincoln Savi, or Savimade.ca or both as the creator of the tool so that others can find it.")
+            st.write("Feel free to buy some stl files from my website as a thank you!")
+            st.link_button("Savimade.ca","https://savimade.ca/shop",type="primary")    
         col1, col2 = st.columns([7, 1],vertical_alignment="center")
         col1.markdown("<h2>Parameters</h2>", unsafe_allow_html=True)
         L = col1.slider("Length (mm)", 10.0, 160.0, st.session_state.L, 0.1)
@@ -232,7 +221,7 @@ def main():
 
     with colb.container(border=True):
         col7, col8 = st.columns([3,1])
-        auto_scale = col8.checkbox("Auto-scale 2D preview", value=st.session_state.auto_scale, key="auto_scale_checkbox")
+        auto_scale = st.checkbox("Auto-scale 2D preview", value=st.session_state.auto_scale, key="auto_scale_checkbox")
         fig = generate_2d_preview(B, L, D_L4, n, auto_scale)
         st.pyplot(fig)
 
@@ -269,7 +258,17 @@ def main():
         pass
 
 # Add credits to the bottom of the app
+
     st.markdown("---")
+        # Add the centered, clickable logo using HTML
+    st.markdown("""
+        <div style="display: flex; justify-content: center;">
+            <a href="https://savimade.ca" target="_blank">
+                <img src="https://savimade.ca/wp-content/uploads/2019/01/Untitled-4-01.png" width="200">
+            </a>
+        </div>
+    """, unsafe_allow_html=True)
+    st.markdown(" ")
     st.markdown("<p style='text-align: center;'>Created by Lincoln Savi of Savimade.ca | <a href='https://savimade.ca/contact'>Contact</a></p>", unsafe_allow_html=True)
     
 
